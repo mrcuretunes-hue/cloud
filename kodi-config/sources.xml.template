@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!--
+  Put this file in Kodi's userdata folder on EVERY device. Because the paths are
+  identical on every device (they all point at the server's SMB shares), the
+  shared library works correctly.
+-->
+<sources>
+  <video>
+    <default pathversion="1"></default>
+    <source>
+      <name>Movies</name>
+      <path pathversion="1">smb://${SERVER_IP}/Movies/</path>
+      <allowsharing>true</allowsharing>
+    </source>
+    <source>
+      <name>TV Shows</name>
+      <path pathversion="1">smb://${SERVER_IP}/TVShows/</path>
+      <allowsharing>true</allowsharing>
+    </source>
+  </video>
+  <music>
+    <default pathversion="1"></default>
+    <source>
+      <name>Music</name>
+      <path pathversion="1">smb://${SERVER_IP}/Music/</path>
+      <allowsharing>true</allowsharing>
+    </source>
+  </music>
+</sources>

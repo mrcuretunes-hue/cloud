@@ -1,0 +1,7 @@
+-- Rendered by scripts/setup.sh into 01-kodi.sql (git-ignored).
+-- Creates the account Kodi uses for its shared library. Kodi creates its own
+-- databases (MyVideosNNN / MyMusicNNN) on first launch, so the account needs
+-- privileges to create and manage databases.
+CREATE USER IF NOT EXISTS '${KODI_DB_USER}'@'%' IDENTIFIED BY '${KODI_DB_PASSWORD}';
+GRANT ALL PRIVILEGES ON *.* TO '${KODI_DB_USER}'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
