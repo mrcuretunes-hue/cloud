@@ -50,15 +50,20 @@ Put your media into `media/Movies`, `media/TVShows`, `media/Music` (or point
 
 ### 2. On each Kodi device (tablet, etc.)
 
-Copy the generated files from `build/kodi-config/` into Kodi's userdata folder:
+`./scripts/setup.sh` renders two config sets under `build/kodi-config/`:
+`controller/` (shared server library) and `standalone/` (local offline library).
+Pick a mode:
 
-- `advancedsettings.xml` — connects the library to the shared MariaDB
-- `sources.xml` — adds the SMB media sources
-- `passwords.xml` — SMB credentials (optional)
+```bash
+./scripts/switch-mode.sh auto         # controller if the server is reachable, else standalone
+./scripts/switch-mode.sh controller   # use + update the shared server library
+./scripts/switch-mode.sh standalone   # use the tablet's own offline library
+```
 
-Then in Kodi: **Videos → Files → add source** is already populated; set the
-content type (Movies / TV shows), and **Update library**. Repeat on every
-device — they all read/write the same shared database.
+(Or copy the files from `build/kodi-config/<mode>/` into Kodi's userdata by
+hand.) Restart Kodi after switching. In **controller** mode, set the content
+type on each source and **Update library** — metadata + watched state then live
+in the shared DB and every device stays in sync.
 
 See [`docs/server-setup.md`](docs/server-setup.md) and
 [`docs/tablet-setup.md`](docs/tablet-setup.md) for full details.
@@ -70,6 +75,7 @@ See [`docs/server-setup.md`](docs/server-setup.md) and
 | `docker-compose.yml` | Server stack: MariaDB + Samba |
 | `.env.example` | All configurable values (IPs, passwords, media path) |
 | `scripts/setup.sh` | Render config from `.env`, create folders |
+| `scripts/switch-mode.sh` | Switch a device between standalone (offline) and controller (shared) |
 | `scripts/verify.sh` | Health-check the running stack |
 | `scripts/backup.sh` / `scripts/restore.sh` | Back up / restore the shared library DB |
 | `server/mariadb/init/` | SQL that provisions the Kodi DB account |

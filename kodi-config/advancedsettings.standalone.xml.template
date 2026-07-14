@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!--
+  STANDALONE / OFFLINE mode for the tablet.
+  There is deliberately NO <videodatabase>/<musicdatabase> block, so Kodi uses
+  its OWN LOCAL library on this device and works with no server/network.
+  Switch to controller mode (scripts/switch-mode.sh) when back on the LAN.
+-->
+<advancedsettings>
+  <videolibrary>
+    <importwatchedstate>true</importwatchedstate>
+    <importresumepoint>true</importresumepoint>
+  </videolibrary>
+</advancedsettings>

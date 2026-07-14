@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!--
+  STANDALONE / OFFLINE sources: point at media stored ON this device so it plays
+  with no network. Set TABLET_LOCAL_MEDIA in .env (e.g. Android internal storage
+  /storage/emulated/0, or an SD card path).
+-->
+<sources>
+  <video>
+    <default pathversion="1"></default>
+    <source>
+      <name>Movies (on this device)</name>
+      <path pathversion="1">${TABLET_LOCAL_MEDIA}/Movies/</path>
+      <allowsharing>true</allowsharing>
+    </source>
+    <source>
+      <name>TV Shows (on this device)</name>
+      <path pathversion="1">${TABLET_LOCAL_MEDIA}/TVShows/</path>
+      <allowsharing>true</allowsharing>
+    </source>
+  </video>
+  <music>
+    <default pathversion="1"></default>
+    <source>
+      <name>Music (on this device)</name>
+      <path pathversion="1">${TABLET_LOCAL_MEDIA}/Music/</path>
+      <allowsharing>true</allowsharing>
+    </source>
+  </music>
+</sources>
