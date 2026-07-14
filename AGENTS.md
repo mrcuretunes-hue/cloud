@@ -7,9 +7,15 @@ up a Kodi shared media center:
 
 - **Server stack** (`docker-compose.yml`): MariaDB (shared Kodi library DB) +
   Samba (SMB media shares). Meant to run on the user's server `192.168.1.177`.
-- **Kodi client config** (`kodi-config/*.template` → rendered into
-  `build/kodi-config/`): drop-in `advancedsettings.xml`, `sources.xml`,
-  `passwords.xml` for each Kodi device (e.g. the tablet `192.168.1.163`).
+- **Kodi client config** (`kodi-config/*.template` → rendered by
+  `./scripts/setup.sh` into `build/kodi-config/controller/` and
+  `build/kodi-config/standalone/`). A device runs in one of two modes, switched
+  with `./scripts/switch-mode.sh [auto|controller|standalone]`:
+  - **controller** — uses + updates the shared server MariaDB library (needs LAN).
+  - **standalone** — uses the device's own local SQLite library + local media
+    (`TABLET_LOCAL_MEDIA`), fully offline.
+  `switch-mode.sh` copies the chosen set into `KODI_USERDATA` (default
+  `~/.kodi/userdata`); Kodi must be restarted to pick up changes.
 
 ### Running / testing in the cloud VM
 
@@ -35,8 +41,15 @@ up a Kodi shared media center:
 - **Kodi GUI testing**: an XFCE desktop is available on `DISPLAY=:1` (TigerVNC).
   Launch with `DISPLAY=:1 kodi`. There's no GPU, so Kodi falls back to software
   rendering (EGL/VDPAU warnings are expected and harmless). Kodi userdata lives
-  in `~/.kodi/userdata/`; copy the rendered `build/kodi-config/*.xml` there to
-  point Kodi at the shared DB + SMB shares. For offline library scans, set the
-  source's scraper to **"Local information only"** and provide `.nfo` files.
+  in `~/.kodi/userdata/`; use `./scripts/switch-mode.sh` (or copy a
+  `build/kodi-config/<mode>/` set there) to point Kodi at the shared DB + SMB
+  shares (controller) or its local library (standalone). For offline library
+  scans, set the source's scraper to **"Local information only"** and provide
+  `.nfo` files.
+- **Restarting Kodi**: the `/usr/bin/kodi` wrapper auto-relaunches `kodi.bin`, so
+  killing `kodi.bin` alone won't stop it. Launch Kodi under a tmux session and
+  kill that session (then any leftover `bin/kodi` PIDs) to fully restart — needed
+  to reload `advancedsettings.xml`/`sources.xml` after switching modes.
 - Kodi 20 (Nexus) creates DBs named `MyVideos121` / `MyMusic82` in MariaDB on
-  first connect — that confirms the shared-library link is working.
+  first connect — that confirms the shared-library link is working. In standalone
+  mode it instead creates a local SQLite `~/.kodi/userdata/Database/MyVideos*.db`.
