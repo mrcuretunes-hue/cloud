@@ -1,0 +1,54 @@
+# Server-side stack for the Kodi media center.
+# Runs on the SERVER (e.g. 192.168.1.177):
+#   - mariadb : shared Kodi library database (so every device shares watched
+#               state, metadata, resume points, etc.)
+#   - samba   : SMB file shares that serve the media over identical network
+#               paths to every Kodi client.
+#
+# Usage:
+#   cp .env.example .env      # then edit values
+#   ./scripts/setup.sh        # render config + create media folders
+#   docker compose up -d
+
+services:
+  mariadb:
+    image: mariadb:11.4
+    container_name: kodi-mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    command:
+      # Kodi needs these settings for its shared library to work reliably.
+      - --bind-address=0.0.0.0
+      - --max_allowed_packet=128M
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - ./server/mariadb/data:/var/lib/mysql
+      - ./server/mariadb/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  samba:
+    image: dperson/samba
+    container_name: kodi-samba
+    restart: unless-stopped
+    # Advertise the shares on the LAN. host networking makes SMB discovery work
+    # best; if you prefer bridge networking, comment this out and use the ports.
+    network_mode: host
+    environment:
+      TZ: ${TZ:-UTC}
+    command: >
+      -u "${SAMBA_USER};${SAMBA_PASSWORD}"
+      -s "Movies;/media/Movies;yes;no;no;${SAMBA_USER}"
+      -s "TVShows;/media/TVShows;yes;no;no;${SAMBA_USER}"
+      -s "Music;/media/Music;yes;no;no;${SAMBA_USER}"
+      -g "server min protocol = SMB2"
+      -p
+    volumes:
+      - ${MEDIA_ROOT:-./media}/Movies:/media/Movies
+      - ${MEDIA_ROOT:-./media}/TVShows:/media/TVShows
+      - ${MEDIA_ROOT:-./media}/Music:/media/Music

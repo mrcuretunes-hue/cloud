@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!--
+  Put this file in Kodi's userdata folder on EVERY device (tablet + server):
+    - Android : Android/data/org.xbmc.kodi/files/.kodi/userdata/
+    - Windows : %APPDATA%\Kodi\userdata\
+    - Linux   : ~/.kodi/userdata/
+    - LibreELEC: /storage/.kodi/userdata/
+  It points the video + music libraries at the shared MariaDB on the server so
+  every device shares the same library and watched state.
+-->
+<advancedsettings>
+  <videodatabase>
+    <type>mysql</type>
+    <host>${SERVER_IP}</host>
+    <port>${DB_PORT}</port>
+    <user>${KODI_DB_USER}</user>
+    <pass>${KODI_DB_PASSWORD}</pass>
+  </videodatabase>
+  <musicdatabase>
+    <type>mysql</type>
+    <host>${SERVER_IP}</host>
+    <port>${DB_PORT}</port>
+    <user>${KODI_DB_USER}</user>
+    <pass>${KODI_DB_PASSWORD}</pass>
+  </musicdatabase>
+  <videolibrary>
+    <importwatchedstate>true</importwatchedstate>
+    <importresumepoint>true</importresumepoint>
+  </videolibrary>
+</advancedsettings>
