@@ -82,6 +82,15 @@ You do **not** need Ubuntu on the tablet. Pick one:
 that's the simplest, fastest "same library on both devices" setup. Reserve the
 Ubuntu + Docker stack in this repo for the **server** (`192.168.1.177`).
 
+## Does the tablet work offline?
+
+No — in this shared-library design the tablet is a **thin client**. Both the
+library (metadata + watched state, in MariaDB) and the media files (over SMB)
+live on the server, so the tablet needs the server reachable on the same LAN
+(or via VPN when away). If you want true offline use on the tablet, give it its
+own local library (skip `advancedsettings.xml`) with media copied to the tablet
+— but that copy won't stay in sync with the shared library.
+
 ## Troubleshooting
 
 - **Library not syncing** — confirm `advancedsettings.xml` is in userdata and

@@ -52,3 +52,29 @@ services:
       - ${MEDIA_ROOT:-./media}/Movies:/media/Movies
       - ${MEDIA_ROOT:-./media}/TVShows:/media/TVShows
       - ${MEDIA_ROOT:-./media}/Music:/media/Music
+
+  # Optional automated backups of the shared Kodi library database.
+  # Enable with:  docker compose --profile backup up -d
+  # Dumps ALL databases (incl. Kodi's MyVideos*/MyMusic*) to ./backups on a
+  # schedule, keeping the most recent ${BACKUP_KEEP} files. Because the library
+  # lives on the server, this also backs up whatever the tablet added.
+  db-backup:
+    image: fradelg/mysql-cron-backup:1.13.1
+    container_name: kodi-db-backup
+    restart: unless-stopped
+    profiles: ["backup"]
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      MYSQL_HOST: mariadb
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASS: ${MYSQL_ROOT_PASSWORD}
+      MAX_BACKUPS: ${BACKUP_KEEP:-14}
+      INIT_BACKUP: "1"
+      # Daily at 03:30. Standard cron syntax.
+      CRON_TIME: ${BACKUP_CRON:-30 3 * * *}
+      GZIP_LEVEL: "9"
+    volumes:
+      - ./backups:/backup

@@ -8,5 +8,8 @@ server/mariadb/init/*.sql
 # Persistent service data
 server/mariadb/data/
 
+# Database backups
+backups/
+
 # Sample / real media
 media/
