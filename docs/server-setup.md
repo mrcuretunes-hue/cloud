@@ -58,6 +58,33 @@ database** (MariaDB) and the **media file shares** (Samba).
    standard Kodi naming so scraping works, e.g.
    `Movies/The Matrix (1999)/The Matrix (1999).mkv`).
 
+## Backups (protect the shared library)
+
+The whole library (metadata + watched state for every device, including the
+tablet) lives in MariaDB on this server, so backing up the database backs up
+everyone's library.
+
+**Manual:**
+
+```bash
+./scripts/backup.sh                       # -> backups/kodi-<timestamp>.sql.gz
+./scripts/restore.sh backups/kodi-....sql.gz   # restore (overwrites current DB)
+```
+
+`backup.sh` keeps the most recent `BACKUP_KEEP` files (default 14).
+
+**Automated (scheduled):**
+
+```bash
+docker compose --profile backup up -d     # runs a backup now + on BACKUP_CRON
+```
+
+This starts a small `db-backup` container that dumps all databases to `backups/`
+on the schedule in `.env` (`BACKUP_CRON`, default daily at 03:30) and keeps the
+last `BACKUP_KEEP` copies.
+
+To restore a backup, stop Kodi on all devices first so nothing is mid-write.
+
 ## Notes
 
 - MariaDB data persists in `server/mariadb/data/`.

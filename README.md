@@ -71,6 +71,7 @@ See [`docs/server-setup.md`](docs/server-setup.md) and
 | `.env.example` | All configurable values (IPs, passwords, media path) |
 | `scripts/setup.sh` | Render config from `.env`, create folders |
 | `scripts/verify.sh` | Health-check the running stack |
+| `scripts/backup.sh` / `scripts/restore.sh` | Back up / restore the shared library DB |
 | `server/mariadb/init/` | SQL that provisions the Kodi DB account |
 | `kodi-config/*.template` | Kodi client config templates |
 | `docs/` | Step-by-step server + tablet guides |
