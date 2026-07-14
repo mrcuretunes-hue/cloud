@@ -35,6 +35,53 @@ Repeat steps 1–2 on every device. Because they all point at the same MariaDB
 and the same SMB paths, watched status and resume points stay in sync. Only run
 a full scan from one device — the rest just read the shared library.
 
+## How "one library across 2 devices" actually works
+
+This is the key idea, and it answers "can I have the same user in a different
+instance / a mirror?":
+
+- Each device runs its **own** Kodi instance (its own app, its own screen).
+- They **share one brain**: the MariaDB database (`advancedsettings.xml`) and the
+  SMB files (`sources.xml`). So the tablet and the server show the **identical**
+  library, artwork, watched flags, and resume points.
+- Mark a movie watched or pause it at 20:00 on the server, and the tablet sees
+  that instantly. That is the "mirror / same user, different instance" experience
+  — it's **library/state mirroring, not screen mirroring**. Each device plays
+  independently but reads and writes the same shared data.
+
+You do **not** need to duplicate anything by hand. Copying the same three XML
+files into each device's userdata is the entire "make it a mirror" step.
+
+## Running the tablet (Samsung Galaxy Tab S10) as a second instance
+
+You do **not** need Ubuntu on the tablet. Pick one:
+
+1. **Native Android Kodi (recommended).** Install Kodi from the Play Store or the
+   official APK at kodi.tv. Copy the three XML files into
+   `Android/data/org.xbmc.kodi/files/.kodi/userdata/` (use a file manager or
+   `adb push`). This gives the best performance (hardware video decoding) and
+   turns the tablet into a full mirror of the shared library. This is what the
+   demo/config in this repo targets.
+
+2. **Ubuntu on the tablet (only if you specifically want a Linux desktop).**
+   Possible but not recommended for playback, because none of these get GPU
+   video acceleration on the tablet, so video will be software-decoded and
+   choppy:
+   - **Termux + `proot-distro` Ubuntu + a VNC X server**, then run desktop Kodi
+     inside it (same as the server: `apt install kodi`, drop the XML files in
+     `~/.kodi/userdata/`).
+   - **Android 15 "Linux Terminal"** (the built-in Debian VM) where available —
+     again a real Linux env but no media-grade GPU passthrough.
+   - Samsung's old "Linux on DeX" is discontinued and not an option.
+
+3. **Just a remote, not a player.** If you only want to control the server's
+   Kodi from the tablet, install the official **Kore** remote app instead of a
+   second Kodi instance.
+
+**Bottom line:** run native Kodi on the tablet and copy the same config files —
+that's the simplest, fastest "same library on both devices" setup. Reserve the
+Ubuntu + Docker stack in this repo for the **server** (`192.168.1.177`).
+
 ## Troubleshooting
 
 - **Library not syncing** — confirm `advancedsettings.xml` is in userdata and
