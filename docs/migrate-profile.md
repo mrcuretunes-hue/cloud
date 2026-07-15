@@ -12,7 +12,39 @@ its home directory (`.kodi/`):
 Migrating is just: back up those from the old Kodi, restore them onto the clean
 install.
 
-## Steps
+## Same tablet, clean reinstall (Android) — easiest method
+
+If the Kodi you want to keep is already on the tablet and you're reinstalling on
+that same tablet, everything is compatible (same platform + version), so **all**
+add-ons — including binary ones — carry over. The simplest on-device way (no PC,
+no shell) is Kodi's own **Backup** add-on:
+
+1. **Install the Backup add-on** in your current Kodi: Add-ons → Install from
+   repository → Kodi Add-on repository → Program add-ons → **Backup** → Install.
+2. In Backup → Settings, set the **backup location to a folder OUTSIDE the app's
+   data** — e.g. internal shared storage `/storage/emulated/0/KodiBackup`, an SD
+   card, or a cloud/network folder. Select what to include (add-ons + userdata).
+3. Run **Backup now**.
+
+   > CRITICAL on Android: uninstalling the Kodi app (or "Clear data") **deletes**
+   > `Android/data/org.xbmc.kodi/`, which is where the profile lives. So the
+   > backup MUST live somewhere else (shared storage / SD / cloud) before you
+   > wipe. Verify the backup zip exists in that folder first.
+
+4. **Clean install:** either uninstall + reinstall Kodi, or Settings → Apps →
+   Kodi → Storage → **Clear data** for a fresh profile.
+5. Reinstall the Backup add-on on the fresh Kodi, point it at the same location,
+   and choose **Restore**. Restart Kodi.
+
+Alternatively, if you have a PC: copy the whole `Android/data/org.xbmc.kodi/files/.kodi`
+folder off the tablet before wiping, then copy it back after. (Note: on Android
+11+ this app-data folder isn't reachable via plain `adb pull`/most file managers,
+which is why the on-device Backup add-on is the reliable route.)
+
+The `scripts/kodi-profile-backup.sh` / `restore.sh` below are for Linux/desktop
+Kodi (or Android via Termux) — handy if you manage the profile from a computer.
+
+## Steps (Linux/desktop, or via a computer)
 
 **1. On the old Kodi (the one you want to keep):**
 ```bash
