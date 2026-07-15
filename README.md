@@ -87,4 +87,5 @@ See [`docs/server-setup.md`](docs/server-setup.md) and
 A Cursor **Cloud Agent** runs in Cursor's datacenter and can't reach your home
 network. To let an agent read your home-lab configs and deploy to the server/TV,
 run it on a machine on your LAN (e.g. the Mini PC / hypervisor host) — see
-[`docs/run-on-my-machine.md`](docs/run-on-my-machine.md).
+[`docs/run-on-my-machine.md`](docs/run-on-my-machine.md). New to the Cursor
+layout? See the [`docs/cursor-cheatsheet.md`](docs/cursor-cheatsheet.md).
