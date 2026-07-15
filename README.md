@@ -65,6 +65,9 @@ hand.) Restart Kodi after switching. In **controller** mode, set the content
 type on each source and **Update library** — metadata + watched state then live
 in the shared DB and every device stays in sync.
 
+Already have a Kodi you love? Move its add-ons + settings to a clean install with
+[`docs/migrate-profile.md`](docs/migrate-profile.md).
+
 See [`docs/server-setup.md`](docs/server-setup.md) and
 [`docs/tablet-setup.md`](docs/tablet-setup.md) for full details.
 
@@ -76,6 +79,7 @@ See [`docs/server-setup.md`](docs/server-setup.md) and
 | `.env.example` | All configurable values (IPs, passwords, media path) |
 | `scripts/setup.sh` | Render config from `.env`, create folders |
 | `scripts/switch-mode.sh` | Switch a device between standalone (offline) and controller (shared) |
+| `scripts/kodi-profile-backup.sh` / `kodi-profile-restore.sh` | Move a Kodi profile (add-ons + settings) to a clean install |
 | `scripts/verify.sh` | Health-check the running stack |
 | `scripts/backup.sh` / `scripts/restore.sh` | Back up / restore the shared library DB |
 | `server/mariadb/init/` | SQL that provisions the Kodi DB account |
