@@ -76,6 +76,35 @@ settings. Start Kodi.
 | Linux | `~/.kodi` |
 | LibreELEC / CoreELEC | `/storage/.kodi` |
 
+## Copy your setup to another device (e.g. tablet -> computer)
+
+To get the same add-ons/settings onto your computer's Kodi:
+
+1. On the **tablet**, make a backup with the **Backup add-on** (it writes a
+   cross-platform `.zip`) to shared storage / cloud, and copy that zip to the
+   computer. (Or, if the source were a desktop, use `kodi-profile-backup.sh`.)
+2. Install Kodi on the **computer**, install the Backup add-on there, point it at
+   the zip, and **Restore** (or use `kodi-profile-restore.sh` on Linux/desktop).
+
+What transfers across platforms and what doesn't:
+
+- **Transfers fine:** script/plugin add-ons, repositories, skins, favourites,
+  per-add-on data/logins (`addon_data/`), and most GUI settings.
+- **Reinstall on the computer:** **binary add-ons** built for the tablet's
+  Android/ARM won't run on a Windows/Linux/macOS computer (e.g. some PVR clients,
+  `inputstream.*`). Reinstall those from their repo on the computer — your
+  settings for them still come across.
+- **Fix afterward:** any **sources** that point at Android-only paths (e.g.
+  `/storage/emulated/0/...`). If your media is on the server over SMB, this is a
+  non-issue — use controller mode so the computer points at the shared library
+  (`./scripts/switch-mode.sh controller`) and the same `smb://SERVER/...` paths
+  work everywhere.
+
+If you just want the computer to share the **same library** as the tablet (not
+necessarily identical add-ons), you don't need to migrate at all — just put the
+controller-mode config on it (see `docs/tablet-setup.md`), and it joins the
+shared library on the server.
+
 ## Caveats
 
 - **Match the Kodi major version** on the clean install when you can. Moving
