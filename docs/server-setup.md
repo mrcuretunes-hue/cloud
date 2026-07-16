@@ -58,6 +58,27 @@ database** (MariaDB) and the **media file shares** (Samba).
    standard Kodi naming so scraping works, e.g.
    `Movies/The Matrix (1999)/The Matrix (1999).mkv`).
 
+## One-command remote deploy (from a machine on your LAN)
+
+If you'd rather not clone/configure on the server by hand, run this **from any
+computer on the same network as the server** (after editing `.env` locally):
+
+```bash
+./scripts/deploy-remote.sh ubuntu@192.168.1.177            # sync + render + up
+./scripts/deploy-remote.sh --backup ubuntu@192.168.1.177   # also start scheduled backups
+./scripts/deploy-remote.sh --no-up ubuntu@192.168.1.177    # sync + render only
+```
+
+It `rsync`s the project to the server, copies your `.env`, runs `setup.sh`, and
+brings up the stack (`docker compose up -d`) then `verify.sh`. Requirements:
+`ssh`/`rsync` locally, and `docker` + compose plugin on the server (your SSH user
+needs permission to run docker, i.e. in the `docker` group or via sudo).
+
+> The cloud agent runs in an isolated VM and cannot reach your home LAN, so this
+> deploy must be run from a device on your own network. See the note in
+> `docs/tablet-setup.md` about bridging with Tailscale if you want a remote
+> host to reach the server.
+
 ## Backups (protect the shared library)
 
 The whole library (metadata + watched state for every device, including the

@@ -80,6 +80,7 @@ See [`docs/server-setup.md`](docs/server-setup.md) and
 | `scripts/setup.sh` | Render config from `.env`, create folders |
 | `scripts/switch-mode.sh` | Switch a device between standalone (offline) and controller (shared) |
 | `scripts/kodi-profile-backup.sh` / `kodi-profile-restore.sh` | Move a Kodi profile (add-ons + settings) to a clean install |
+| `scripts/deploy-remote.sh` | Deploy the server stack to your Ubuntu server over SSH (run from your LAN) |
 | `scripts/verify.sh` | Health-check the running stack |
 | `scripts/backup.sh` / `scripts/restore.sh` | Back up / restore the shared library DB |
 | `server/mariadb/init/` | SQL that provisions the Kodi DB account |
@@ -91,4 +92,5 @@ See [`docs/server-setup.md`](docs/server-setup.md) and
 A Cursor **Cloud Agent** runs in Cursor's datacenter and can't reach your home
 network. To let an agent read your home-lab configs and deploy to the server/TV,
 run it on a machine on your LAN (e.g. the Mini PC / hypervisor host) — see
-[`docs/run-on-my-machine.md`](docs/run-on-my-machine.md).
+[`docs/run-on-my-machine.md`](docs/run-on-my-machine.md). New to the Cursor
+layout? See the [`docs/cursor-cheatsheet.md`](docs/cursor-cheatsheet.md).

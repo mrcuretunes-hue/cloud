@@ -41,6 +41,19 @@ if [ "$MODE" = "auto" ]; then
 fi
 
 mkdir -p "$USERDATA"
+
+# Only these files are touched. Everything else in your Kodi build (add-ons,
+# repositories, skin, favourites, addon_data, other settings) is left untouched.
+# Back up the current versions first so switching is fully reversible.
+BACKUP_DIR="$USERDATA/.switch-mode-backups/$(date +%Y%m%d-%H%M%S)"
+saved=0
+for f in advancedsettings.xml sources.xml passwords.xml; do
+  if [ -f "$USERDATA/$f" ]; then
+    mkdir -p "$BACKUP_DIR"; cp "$USERDATA/$f" "$BACKUP_DIR/"; saved=1
+  fi
+done
+[ "$saved" -eq 1 ] && echo "Backed up existing config to ${BACKUP_DIR}"
+
 case "$MODE" in
   controller)
     cp "$CFG/controller/advancedsettings.xml" "$USERDATA/"
@@ -60,3 +73,4 @@ esac
 
 echo "$MODE" > "$USERDATA/.kodi-mode"
 echo "Switched to '${MODE}' mode in ${USERDATA}. Restart Kodi to apply."
+[ "$saved" -eq 1 ] && echo "Revert with:  cp ${BACKUP_DIR}/* ${USERDATA}/"
