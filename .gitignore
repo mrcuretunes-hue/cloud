@@ -14,5 +14,5 @@ backups/
 # Sample / real media
 media/
 
-# Kodi profile backup archives (test artifacts)
+# Kodi profile backups (test artifacts)
 kodi-backups/
